@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 5432:5432
+
+  mc:
+    image: minio/mc
+    volumes:
+      - type: bind
+        source: ./bucketpolicy.json
+        target: /bucketpolicy.json
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set minio ${MINIO_URL} ${MINIO_ACCESSKEY} ${MINIO_SECRETKEY};
+      /usr/bin/mc mb minio/avatars;
+      /usr/bin/mc anonymous set-json /bucketpolicy.json minio/avatars;
+      exit 0;"
+
+  account_service:
+    build:
+      dockerfile: Dockerfile
+      context: . 
+    depends_on: 
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - ${MICROSERVICE_PORT}:${MICROSERVICE_PORT}
+
+volumes:
+  minio_storage: {}
+volumes:
+  minio_storage: {}
