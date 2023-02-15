@@ -2,13 +2,18 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  HttpException,
+  createParamDecorator
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AccountService } from './service'
 import { createException } from './exception'
 import { UAParser } from 'ua-parser-js'
 
+
+export const GetUser = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+  const request = ctx.switchToHttp().getRequest()
+  return request.user
+})
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -44,7 +49,8 @@ export class AuthGuard implements CanActivate {
     )
     session.save()
 
-    if ((session && roles === undefined) || roles.some((r) => session.user.roles.includes(r))) {
+    if ((session && roles === undefined) || session.user.roles.some((r: string) => roles.includes(r))) {
+      request.user = session.user
       return true
     }
 

@@ -80,6 +80,7 @@ export class AccountService {
   async checkAccessToken(accessToken: string): Promise<AccountType> {
     const session = await this.getSessionByAccessToken(accessToken)
     return {
+      id: session.user.id,
       username: session.user.username,
       email: session.user.email,
       avatar: await this.getAvatarById(session.userId),
@@ -110,6 +111,7 @@ export class AccountService {
       access_token_expire: session.expireAccessToken,
       refresh_token_expire: session.expireRefreshToken,
       user: {
+        id: session.user.id,
         username: session.user.username,
         email: session.user.email,
         avatar: await this.getAvatarById(session.userId),
@@ -150,6 +152,7 @@ export class AccountService {
       access_token_expire: session.expireAccessToken,
       refresh_token_expire: session.expireRefreshToken,
       user: {
+        id: user.id,
         username: user.username,
         email: user.email,
         avatar: await this.getAvatarById(user.id),
@@ -183,6 +186,7 @@ export class AccountService {
       access_token_expire: session.expireAccessToken,
       refresh_token_expire: session.expireRefreshToken,
       user: {
+        id: user.id,
         username: user.username,
         email: user.email,
         avatar: await this.getAvatarById(user.id),

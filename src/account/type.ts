@@ -1,7 +1,8 @@
 export interface AccountType extends FileURLType {
+  id: number
   username: string
   email: string
-  roles: string[]
+  roles: string[] | null
 }
 
 export interface SessionType {
@@ -51,5 +52,5 @@ export interface SessionDescType {
 }
 
 export interface FileURLType {
-  avatar: string
+  avatar: string | null
 }

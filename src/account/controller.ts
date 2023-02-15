@@ -1,7 +1,7 @@
 import { AccountService } from './service'
-import { AuthGuard } from './decorator'
+import { AuthGuard, GetUser } from './decorator'
 import { Controller, UseGuards } from '@nestjs/common'
-import { MessagePattern } from '@nestjs/microservices'
+import { MessagePattern, Payload } from '@nestjs/microservices'
 import {
   CreateUserDTO,
   AuthUserDTO,
@@ -14,6 +14,7 @@ import {
   AvatarUpdate,
   UsernameUpdateDTO
 } from './dto'
+import { AccountType } from './type'
 
 
 @Controller('account')
@@ -32,8 +33,8 @@ export class AccountController {
 
   @MessagePattern({ cmd: 'checkAccessToken' })
   @UseGuards(AuthGuard)
-  checkAccessToken({ access_token }: AccessTokenDTO) {
-    return this.accountService.checkAccessToken(access_token)
+  checkAccessToken(@GetUser() user: AccountType) {
+    return user
   }
 
   @MessagePattern({ cmd: 'renewAccessToken' })
