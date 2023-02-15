@@ -24,5 +24,16 @@ services:
       /usr/bin/mc anonymous set-json /bucketpolicy.json minio/avatars;
       exit 0;"
 
+  account_service:
+    build:
+      dockerfile: Dockerfile
+      context: . 
+    depends_on: 
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - ${MICROSERVICE_PORT}:${MICROSERVICE_PORT}
+
 volumes:
   minio_storage: {}
