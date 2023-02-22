@@ -33,8 +33,8 @@ export class AccountController {
 
   @MessagePattern({ cmd: 'checkAccessToken' })
   @UseGuards(AuthGuard)
-  checkAccessToken(@GetUser() user: AccountType) {
-    return user
+  checkAccessToken({ access_token }: AccessTokenDTO) {
+    return this.accountService.checkAccessToken(access_token)
   }
 
   @MessagePattern({ cmd: 'renewAccessToken' })

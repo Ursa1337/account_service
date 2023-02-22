@@ -49,7 +49,10 @@ export class AuthGuard implements CanActivate {
     )
     session.save()
 
-    if ((session && roles === undefined) || session.user.roles.some((r: string) => roles.includes(r))) {
+    if (
+        (session && roles === undefined) || 
+        (session.user.roles &&  roles.some((r) => session.user.roles.includes(r)))
+    ) {
       request.user = session.user
       return true
     }
